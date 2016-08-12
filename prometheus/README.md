@@ -8,15 +8,13 @@
 
 docker build -t willnc/prometheus-combo 
 
+```
 docker run --detach=true --name=prom --hostname=prom --restart=always \
-
                 -p 	0.0.0.0:9090:9090 -p 0.0.0.0:9091:9091 \
-
-				-v ./data/:/usr/local/prometheus/data/ \
-
+		-v ./data/:/usr/local/prometheus/data/ \
                 --cap-add=NET_ADMIN \
-
                 -d willnc/prometheus-combo
+```
 
 # To use it
 
