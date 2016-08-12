@@ -1,2 +1,2 @@
 # data
-store, visuallize, analyze
+store, visuallize, analyze data
