@@ -1,0 +1,14 @@
+#!/bin/bash
+service iptables start
+pushd /usr/local/prometheus/
+# default staleness-delta is 5m. 
+# This paramter affect the way a graph with hourly data appear on Grafana.
+# 1. The data point will extend for 5 minutes, then, connect to the next hour's data point.
+# 2. Grafana will adjust timer resolution based on time range. At bigger time range, when the auto selected resolution is 5 minutes, Prometheus will return empty data set. There will be no graph. I hard code to 3 minutes time resolution and resolve the problem.
+# 3. I tried to increase the staleness parameter. Then, the horizonal extension on Grafana graph become more prominent and look like extra data point. So, I decided to stay with the default 5m. 
+./prometheus -query.staleness-delta=5m0s -config.file=prometheus.yml &>/tmp/prom.log &
+popd
+pushd /usr/local/pushgateway
+nohup ./pushgateway -web.listen-address 0.0.0.0:9091 -persistence.file /dev/shm/pusgateway.tmp &>/tmp/pushgateway.log &
+popd
+/usr/sbin/crond -n
